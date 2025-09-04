@@ -1,4 +1,3 @@
-fetchData()
 
 async function fetchData() {
     const apiKey = "sdRwWbzN95PiyVwkzYAwAgdulkLnzSIlvWdMAvqe"
@@ -11,9 +10,13 @@ async function fetchData() {
         }
 
         const data = await response.json()
-        console.log(data)
+         console.log(data) //.near_earth_objects.map(a => ({name: a.name,
+        //      orbital_data: a.orbital_data}))
+        //     )
+          
     }
     catch(error) {
       console.log(error)
     }
 }
+fetchData()
