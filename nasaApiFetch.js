@@ -1,22 +1,30 @@
+// nasaApi.js
+let nasaData = null;        // will hold the data
+let isFetching = false;     // to prevent duplicate fetches
+const apiKey = "sdRwWbzN95PiyVwkzYAwAgdulkLnzSIlvWdMAvqe";
 
-async function fetchData() {
-    const apiKey = "sdRwWbzN95PiyVwkzYAwAgdulkLnzSIlvWdMAvqe"
-    
-    try{
-        const response = await fetch(`https://api.nasa.gov/neo/rest/v1/neo/browse?api_key=${apiKey}`)
+// Function to load data only once
+async function loadData() {
+  if (nasaData) return nasaData;  // already cached
+  if (isFetching) return;         // avoid duplicate fetch
+  
+  isFetching = true;
 
-        if (!response.ok) {
-            throw new Error('Could not fetch source')
-        }
+  try {
+    const response = await fetch(
+      `https://api.nasa.gov/neo/rest/v1/neo/browse?api_key=${apiKey}`
+    );
+    if (!response.ok) throw new Error("Could not fetch source");
 
-        const data = await response.json()
-         console.log(data) //.near_earth_objects.map(a => ({name: a.name,
-        //      orbital_data: a.orbital_data}))
-        //     )
-          
-    }
-    catch(error) {
-      console.log(error)
-    }
+    nasaData = await response.json(); // cache result
+    return nasaData;
+  } catch (error) {
+    console.error(error);
+  } finally {
+    isFetching = false;
+  }
 }
-fetchData()
+
+// Export both
+export { nasaData, loadData };
+
